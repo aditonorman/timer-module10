@@ -116,16 +116,30 @@ impl Executor {
 fn main() {
     let (executor, spawner) = new_executor_and_spawner();
 
-    // Spawn a task
+    // Spawn multiple tasks
     spawner.spawn(async {
-        println!("Dito's Komputer: howdy!");
+        println!("Dito's Komputer: howdy1!");
         TimerFuture::new(Duration::new(2, 0)).await;
-        println!("Dito's Komputer: done!");
+        println!("Dito's Komputer: done1!");
     });
 
-    // 🔸 Added as required by Experiment 1.2
+    spawner.spawn(async {
+        println!("Dito's Komputer: howdy2!");
+        TimerFuture::new(Duration::new(2, 0)).await;
+        println!("Dito's Komputer: done2!");
+    });
+
+    spawner.spawn(async {
+        println!("Dito's Komputer: howdy3!");
+        TimerFuture::new(Duration::new(2, 0)).await;
+        println!("Dito's Komputer: done3!");
+    });
+
     println!("Dito's Komputer: hey hey");
 
-    drop(spawner);
+    // 🔴 Comment this out to see effect: tasks will hang
+    // drop(spawner);
+
     executor.run();
 }
+
